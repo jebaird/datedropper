@@ -3,6 +3,22 @@ jQuery.easing._dd_easing = function(x, t, b, c, d) {
 };
 
 (function($) {
+	
+	// debounce barrowed from underscore.js
+	function debounce(func, wait, immediate) {
+		var timeout;
+		return function() {
+			var context = this, args = arguments;
+			var later = function() {
+				timeout = null;
+				if (!immediate) func.apply(context, args);
+			};
+			var callNow = immediate && !timeout;
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
     $.fn.dateDropper = function(options) {
         return $(this).each(function() {
             if ($(this).is('input') && $(this).attr('type') == "text") {
@@ -1206,11 +1222,11 @@ jQuery.easing._dd_easing = function(x, t, b, c, d) {
 				  e.preventDefault();
 				})
 
-                $(window).resize(function() {
+                $(window).resize(debounce(function() {
 
                     _dd_placement();
 
-                });
+                }, 300));
 
 
             }
